@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 
+from model.residual_vq import ResidualVQ
+
 
 class SemanticEncoder(nn.Module):
     """
@@ -27,24 +29,20 @@ class SemanticEncoder(nn.Module):
 
 
 class ResidualQuantizer(nn.Module):
-    def __init__(self, codebook_cardinality=256, codebook_dim=32):
+    def __init__(self):
         super(ResidualQuantizer, self).__init__()
-        # 在实际应用中，这些码本可能通过聚类或其他方式预先计算和存储
-        self.codebooks = [torch.randn(codebook_cardinality, codebook_dim) for _ in range(3)]
 
-    def forward(self, latent_representation):
-        residuals = [latent_representation]
-        for i, codebook in enumerate(self.codebooks):
-            distances = torch.cdist(latent_representation.unsqueeze(1), codebook.unsqueeze(0))
-            _, nearest_indices = distances.min(dim=1)
-            quantized_residual = codebook[nearest_indices]
-            if i < len(self.codebooks) - 1:
-                residual = latent_representation - quantized_residual
-                residuals.append(residual)
-                latent_representation = residual
-            else:
-                quantized_representation = sum(residuals) + quantized_residual
-        return quantized_representation
+    def forward(self, x):
+        residual_vq = ResidualVQ(
+            dim=32,
+            num_quantizers=3,
+            codebook_size=256,
+            stochastic_sample_codes=True,
+            sample_codebook_temp=0.1,
+            shared_codebook=False
+        )
+        quantized, indices, commit_loss = residual_vq(x)
+        return quantized, indices, commit_loss
 
 
 class SemanticDecoder(nn.Module):
@@ -90,6 +88,7 @@ if __name__ == "__main__":
     quantizer = ResidualQuantizer()
 
     # 对潜在表示进行量化
-    quantized_latent_representations = quantizer(latent_representations)
-
-    print(f"Quantized latent representations shape: {quantized_latent_representations.shape}")
+    quantized, indices, commit_loss = quantizer(latent_representations)
+    print(f"Quantized representations shape: {quantized.shape}")
+    print(f"Indices shape: {indices.shape}")
+    print(f"Commit loss: {commit_loss}")
