@@ -8,7 +8,7 @@ from transformers import T5ForConditionalGeneration, T5Tokenizer, T5Model, AdamW
 import os
 
 # 设置checkpoint路径。这应当与保存模型时相同的路径
-checkpoint_path = "checkpoints/t5_small_69"  # 假设我们加载第1个epoch后的checkpoint
+checkpoint_path = "checkpoints/t5_small_200"  #修改使用的checkpoint
 
 # 加载tokenizer
 tokenizer = T5Tokenizer.from_pretrained(checkpoint_path)
