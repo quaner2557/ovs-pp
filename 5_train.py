@@ -237,3 +237,5 @@ while global_step < max_step:
         # Break the loop if max step is reached
         if global_step >= max_step:
             break
+
+print('step5 finished!')

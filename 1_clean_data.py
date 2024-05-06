@@ -63,3 +63,5 @@ with open('datasets/meta_Beauty.json', 'r') as file:
                         success_file.write(new_line + '\n')
                     except Exception as e:
                         error_file.write(new_line + '\n')
+
+print('step1 finished!')

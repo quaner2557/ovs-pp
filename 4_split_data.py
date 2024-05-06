@@ -73,4 +73,4 @@ print('字典已保存到reviewer_asin_dict.json文件中。')
 
 user_item_file = 'datasets/reviewer_asin_dict.json'
 split_data(user_item_file)
-print('文件已切分成训练和测试集')
+print('step4 finished!')

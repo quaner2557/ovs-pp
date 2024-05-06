@@ -171,3 +171,5 @@ for step, (input_sequences, target_tests, attention_masks) in progress_bar:
 hit_rate = hit_count / total_count
 
 print("Total Hit Rate: {:.2f}%".format(100 * hit_rate))
+
+print('step6 finished!')

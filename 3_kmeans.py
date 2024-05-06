@@ -160,3 +160,4 @@ with open('datasets/encoded_items.json', 'w') as f:
 print("Items have been encoded and saved to 'encoded_items.json'")
 # 统计编码的重合度
 calculate_duplicate_ratio('datasets/encoded_items.json')
+print('step3 finished!')
